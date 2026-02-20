@@ -12,6 +12,18 @@
 ## Generate objects in a subdirectory
 # MAKE="$MAKE O=.vscode/build-$TARGET_ARCH/"
 
+#
+## Fully override any task by defining task_<command>().
+## Hyphens in command names become underscores in function names.
+## Example: override "defconfig"
+# task_defconfig() {
+#   if [ ! -f "${WORKSPACE_DIR}/.config" ]; then
+#     eval ${MAKE} ARCH=${TARGET_ARCH} tinyconfig
+#     scripts/config --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+#     eval ${MAKE} ARCH=${TARGET_ARCH} olddefconfig
+#   fi
+# }
+
 ## Enable some random kernel CONFIG by default as part of the .config generation
 # if [ $COMMAND = "defconfig" ]; then
 #   trap "scripts/config -e BPF_SYSCALL" EXIT

@@ -227,8 +227,9 @@ there).
     task basically just call `tasks.sh` with a different command flag.
 *   `.vscode/tasks.sh` is a bash script with a big switch statement that
     implements all tasks exposed by `tasks.json`. They all share a common
-    preamble customizable
-    locally by local.sh.
+    preamble customizable locally by local.sh. Tasks can be overridden in
+    local.sh by defining a method called `task_<command>()`.
+    Example: "start-wait-dbg" => `task_start_wait_dbg`
 *   `.vscode/settings.jsonnet` [provides per-workspace configuration values to
     VSCode](https://code.visualstudio.com/docs/getstarted/settings) and its
     extensions. This is constructed by `tasks.sh` by evaluating

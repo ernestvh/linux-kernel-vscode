@@ -130,6 +130,15 @@ fi
     -append \"console=${SERIAL_TTY},115200 root=${ROOT_MNT} rw nokaslr init=/lib/systemd/systemd debug systemd.log_level=info ${KERNEL_CMDLINE_EXTRA}\" \
     -drive file=${IMAGE_PATH},format=raw -kernel ${KERNEL_PATH} ${VM_START_ARGS}"}
 
+# Optional local task override hook:
+# Define task_<command>() in local.sh to fully handle a task.
+# Example: "start-wait-dbg" => task_start_wait_dbg
+TASK_OVERRIDE_FN="task_${COMMAND//-/_}"
+if declare -F "${TASK_OVERRIDE_FN}" > /dev/null; then
+  "${TASK_OVERRIDE_FN}" "$@"
+  exit $?
+fi
+
 case "${COMMAND}" in
 # Virtual machine life-cycle
   "start")
