@@ -55,7 +55,8 @@ done
 
 # Default context variables, can be overridden by local.sh or in environment.
 : ${WORKSPACE_DIR:=`realpath -s "${SCRIPT_DIR}/.."`}
-: ${MAKE:="make -j`nproc` LLVM=1 LLVM_IAS=1 CC='ccache clang'"}
+: ${MAKE_VARS:="LLVM=1 LLVM_IAS=1 CC='ccache clang'"}
+: ${MAKE:="make -j`nproc` ${MAKE_VARS}"}
 : ${TARGET_ARCH:="x86_64"}
 : ${TARGET_GDB:="gdb-multiarch"}
 : ${SILENT_BUILD_FLAG="-s"}
