@@ -3,8 +3,17 @@
 # task so you can use it to plug-in arbitrary extra logic that is specific to
 # your local needs and should not be part of the upstream tasks.sh. For example:
 
+# TODO Get all this from an .env file so that working from terminal or this in
+# in VS code is synced and uses the same root information
+
+TDX_KCONF_DIR=/home/ernest/tdx/linux/linux-toradex-kconfig
+KBUILD_OUTPUT=/home/ernest/tdx/linux/linux-toradex-builds/default
+
+MAKE_VARS="KBUILD_OUTPUT=${KBUILD_OUTPUT} LLVM=1 LLVM_IAS=1 CC='ccache clang'"
+SILENT_BUILD_FLAG=""
+
 ## Cross-compile/debug/emulate for arm64
-# TARGET_ARCH=arm64
+TARGET_ARCH=arm64
 
 ## Change PATH to use a different QEMU binary
 # export PATH=$HOME/qemu/bin/:$PATH
@@ -23,6 +32,16 @@
 #     eval ${MAKE} ARCH=${TARGET_ARCH} olddefconfig
 #   fi
 # }
+
+task_defconfig() {
+  if [ ! -f "${KBUILD_OUTPUT}/.config" ]; then
+    CMD="${MAKE_VARS} ARCH=${TARGET_ARCH} scripts/kconfig/merge_config.sh -O ${KBUILD_OUTPUT} \
+         ${TDX_KCONF_DIR}/cfg/base/base.cfg \
+         ${TDX_KCONF_DIR}/cfg/${TARGET_ARCH}/${TARGET_ARCH}.cfg"
+    echo ${CMD}
+    eval ${CMD}
+  fi
+}
 
 ## Enable some random kernel CONFIG by default as part of the .config generation
 # if [ $COMMAND = "defconfig" ]; then
